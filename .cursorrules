@@ -1,0 +1,26 @@
+# EcoTrack — Reglas del proyecto
+
+## Contexto
+EcoTrack es un MVP web donde el usuario describe en lenguaje natural sus
+actividades del día (ej. "Hoy comí carne y viajé 20km en bus") y la app
+estima su huella de carbono en kg de CO2.
+
+## Stack
+- Next.js 14 (App Router) + TypeScript
+- Tailwind CSS para estilos
+- Sin backend ni base de datos externa: el estado vive en memoria o localStorage
+
+## Cómo escribir el código
+- Componentes pequeños, cada uno con una sola responsabilidad
+- TypeScript estricto, nunca uses `any`
+- Nombres descriptivos en inglés para variables y funciones
+- Comenta solo la lógica no obvia (el cálculo de CO2, el parseo de texto)
+- La app nunca debe crashear por un input inesperado: maneja los casos raros
+  con un mensaje claro, no con una pantalla en blanco
+
+## Cómo trabajar conmigo
+- Antes de generar código nuevo, resume en una línea qué vas a construir
+- Si algo falla, no me pidas que lo depure a mano: propone tú el fix y
+  explica en una línea por qué pasó
+- Esto es un MVP para validar una idea, no un sistema en producción —
+  prioriza que la intención del producto funcione sobre la perfección técnica

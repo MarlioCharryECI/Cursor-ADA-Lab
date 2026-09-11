@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f4f6f3;
+  --foreground: #3f4a43;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-result {
+  animation: fade-up 420ms ease-out;
+}
