@@ -24,8 +24,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
 # local env files
+.env
 .env*.local
 
 # vercel
@@ -34,3 +36,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# JetBrains IDEs (WebStorm, IntelliJ, etc.)
+.idea/
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+
+# OS files
+Thumbs.db
+desktop.ini

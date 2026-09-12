@@ -3,16 +3,27 @@ export const MAX_ACTIVITY_LENGTH = 4000;
 export const UNRECOGNIZED_MESSAGE =
   "No pude identificar actividades con impacto de carbono";
 
+export type DetectedItem = {
+  label: string;
+  kgCO2: number;
+};
+
 export type EstimateOutcome =
   | { status: "empty" }
   | { status: "too_long" }
   | { status: "unrecognized" }
-  | { status: "success"; kgCO2: number };
+  | { status: "success"; kgCO2: number; items: DetectedItem[] };
 
 const FOOD_RED_MEAT_KG = 6;
 const FOOD_POULTRY_OR_FISH_KG = 2;
 const BUS_KG_PER_KM = 0.1;
 const CAR_KG_PER_KM = 0.2;
+const VAN_KG_PER_VEHICLE = 8;
+const ELECTRICITY_KG_PER_KWH = 0.14;
+
+const KM_PATTERN = /(\d+(?:[.,]\d+)?)\s*k(?:m|ilometros?)\b/g;
+const KWH_PATTERN = /(\d+(?:[.,]\d+)?)\s*kwh\b/g;
+const VAN_PATTERN = /(\d+(?:[.,]\d+)?)\s*camionetas?\b/g;
 
 function normalizeActivityText(text: string): string {
   return text
@@ -26,10 +37,8 @@ function containsStandaloneWord(normalized: string, word: string): boolean {
   return pattern.test(normalized);
 }
 
-function extractKilometers(normalized: string): number {
-  const matches = [
-    ...normalized.matchAll(/(\d+(?:[.,]\d+)?)\s*k(?:m|ilometros?)\b/g),
-  ];
+function extractQuantity(normalized: string, pattern: RegExp): number {
+  const matches = [...normalized.matchAll(pattern)];
 
   if (matches.length === 0) {
     return 0;
@@ -60,20 +69,17 @@ export function estimateCO2(text: string): EstimateOutcome {
   }
 
   const normalized = normalizeActivityText(trimmed);
-  let kgCO2 = 0;
-  let recognized = false;
+  const items: DetectedItem[] = [];
 
   if (normalized.includes("carne")) {
-    kgCO2 += FOOD_RED_MEAT_KG;
-    recognized = true;
+    items.push({ label: "Carne roja", kgCO2: FOOD_RED_MEAT_KG });
   }
 
   if (normalized.includes("pollo") || normalized.includes("pescado")) {
-    kgCO2 += FOOD_POULTRY_OR_FISH_KG;
-    recognized = true;
+    items.push({ label: "Pollo o pescado", kgCO2: FOOD_POULTRY_OR_FISH_KG });
   }
 
-  const kilometers = extractKilometers(normalized);
+  const kilometers = extractQuantity(normalized, KM_PATTERN);
   const mentionsBus =
     normalized.includes("bus") || normalized.includes("transporte publico");
   const mentionsCar =
@@ -83,22 +89,46 @@ export function estimateCO2(text: string): EstimateOutcome {
     normalized.includes("bicicleta") || normalized.includes("caminar");
 
   if (mentionsBus) {
-    kgCO2 += BUS_KG_PER_KM * kilometers;
-    recognized = true;
+    items.push({
+      label: `${kilometers} km en bus`,
+      kgCO2: roundToOneDecimal(BUS_KG_PER_KM * kilometers),
+    });
   }
 
   if (mentionsCar) {
-    kgCO2 += CAR_KG_PER_KM * kilometers;
-    recognized = true;
+    items.push({
+      label: `${kilometers} km en carro`,
+      kgCO2: roundToOneDecimal(CAR_KG_PER_KM * kilometers),
+    });
   }
 
   if (mentionsZeroImpact) {
-    recognized = true;
+    items.push({ label: "Bicicleta o caminata", kgCO2: 0 });
   }
 
-  if (!recognized) {
+  const vanCount = extractQuantity(normalized, VAN_PATTERN);
+  if (vanCount > 0) {
+    items.push({
+      label: `${vanCount} camioneta(s) de reparto`,
+      kgCO2: roundToOneDecimal(VAN_KG_PER_VEHICLE * vanCount),
+    });
+  }
+
+  const kwh = extractQuantity(normalized, KWH_PATTERN);
+  if (kwh > 0) {
+    items.push({
+      label: `${kwh} kWh de electricidad`,
+      kgCO2: roundToOneDecimal(ELECTRICITY_KG_PER_KWH * kwh),
+    });
+  }
+
+  if (items.length === 0) {
     return { status: "unrecognized" };
   }
 
-  return { status: "success", kgCO2: roundToOneDecimal(kgCO2) };
+  const kgCO2 = roundToOneDecimal(
+    items.reduce((total, item) => total + item.kgCO2, 0)
+  );
+
+  return { status: "success", kgCO2, items };
 }

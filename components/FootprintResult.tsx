@@ -54,6 +54,29 @@ export function FootprintResult({ outcome }: FootprintResultProps) {
           kg de CO₂
         </span>
       </p>
+
+      <div className="mt-5 border-t border-stone-100 pt-4">
+        <p className="text-xs font-medium uppercase tracking-[0.16em] text-stone-400">
+          Actividades detectadas en tu texto
+        </p>
+        <ul className="mt-2 flex flex-col gap-1.5">
+          {outcome.items.map((item, index) => (
+            <li
+              key={`${item.label}-${index}`}
+              className="flex items-baseline justify-between gap-4 text-sm text-stone-600"
+            >
+              <span>{item.label}</span>
+              <span className="whitespace-nowrap text-stone-500">
+                {item.kgCO2.toLocaleString("es-ES", {
+                  minimumFractionDigits: item.kgCO2 % 1 === 0 ? 0 : 1,
+                  maximumFractionDigits: 1,
+                })}{" "}
+                kg
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

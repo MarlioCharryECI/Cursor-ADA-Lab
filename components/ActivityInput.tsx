@@ -16,7 +16,7 @@ export function ActivityInput({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         rows={5}
-        placeholder='Ej. "Hoy comí carne y viajé 20km en bus"'
+        placeholder='Ej. "Hoy usamos 5 camionetas de reparto y gastamos 200kWh de luz"'
         className="w-full resize-y rounded-2xl border border-stone-200 bg-white px-4 py-3 text-base leading-relaxed text-stone-800 outline-none placeholder:text-stone-400 focus:border-sage-400 focus:ring-2 focus:ring-sage-100"
       />
     </label>

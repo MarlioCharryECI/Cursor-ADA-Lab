@@ -2,6 +2,11 @@
 
 MVP web que estima una huella de carbono diaria a partir de una frase en lenguaje natural.
 
+1. URL del Repositorio o Repl
+
+Repositorio (código fuente funcional): https://github.com/MarlioCharryECI/Cursor-ADA-Lab
+Demo desplegada y funcionando: https://cursor-ada-gxf1johh4-marliocharryecis-projects.vercel.app
+
 ## Stack
 
 - Next.js 14 (App Router)
@@ -34,4 +39,9 @@ Abre [http://localhost:3000](http://localhost:3000).
 ## Evidencia
 
 ![Evidencia con Cursor y Replit visibles](evidencia.png)
+
+![Evidencia de prompting con Claude (Lab 2)](Evidencia-prompts-claude.png)
+
+Ver `BITACORA-LAB2.md` para la bitácora completa del Lab 2 (capstone),
+incluyendo los prompts usados y la funcionalidad de IA implementada.
 
