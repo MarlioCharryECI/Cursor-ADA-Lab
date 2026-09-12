@@ -42,6 +42,13 @@ Abre [http://localhost:3000](http://localhost:3000).
 
 ![Evidencia de prompting con Claude (Lab 2)](Evidencia-prompts-claude.png)
 
+**Video demo (Lab 2):**
+
+<video src="video-evidencia.mp4" controls width="600"></video>
+
+Si el reproductor no carga, descarga o abre el archivo directamente:
+[video-evidencia.mp4](video-evidencia.mp4).
+
 Ver `BITACORA-LAB2.md` para la bitácora completa del Lab 2 (capstone),
 incluyendo los prompts usados y la funcionalidad de IA implementada.
 
