@@ -30,3 +30,8 @@ Abre [http://localhost:3000](http://localhost:3000).
 - `.cursorrules`
 - `vibe-report.md`
 - Captura de pantalla con Cursor y Replit visibles
+
+## Evidencia
+
+![Evidencia con Cursor y Replit visibles](evidencia.png)
+
